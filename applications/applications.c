@@ -20,6 +20,7 @@ extern int32_t pd_srv(void* p);
 extern int32_t power_menu_srv(void* p);
 extern int32_t headphones_srv(void* p);
 extern int32_t usb_mux_srv(void* p);
+extern int32_t power_meter_srv(void* p);
 
 // applications
 extern int32_t keypad_test_app(void* p);
@@ -32,6 +33,7 @@ extern int32_t self_check_app(void* p);
 extern void power_cli(Cli* cli, FuriString* args, void* context);
 extern void power_consumption_cli(Cli* cli, FuriString* args, void* context);
 extern void led_cli(Cli* cli, FuriString* args, void* context);
+extern void power_meter_cli(Cli* cli, FuriString* args, void* context);
 
 const FlipperInternalApplication FLIPPER_SERVICES[] = {
     {
@@ -153,6 +155,13 @@ const FlipperInternalApplication FLIPPER_SERVICES[] = {
         .stack_size = 1024,
         .flags = FlipperInternalApplicationFlagDefault,
     },
+    {
+        .app = power_meter_srv,
+        .name = "PowerMeterSrv",
+        .appid = "power_meter_srv",
+        .stack_size = 1024,
+        .flags = FlipperInternalApplicationFlagDefault,
+    },
 };
 const size_t FLIPPER_SERVICES_COUNT = COUNT_OF(FLIPPER_SERVICES);
 
@@ -220,6 +229,11 @@ const FlipperInternalCommandApplication FLIPPER_CLI_COMMANDS[] = {
     {
         .callback = led_cli,
         .name = "led",
+        .flags = CliCommandFlagParallelSafe,
+    },
+    {
+        .callback = power_meter_cli,
+        .name = "power_meter",
         .flags = CliCommandFlagParallelSafe,
     },
 };
